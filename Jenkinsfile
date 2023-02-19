@@ -36,13 +36,11 @@ pipeline {
         stage('Terraform Init') {
             steps {
                 dir('.') {
-                     {
                         ansiColor('xterm'){
                             sh 'pwd'
                             sh 'terraform init'
                             sh 'terraform plan -out=tfplan'
                         }
-                    }
                 }
             }
         }
