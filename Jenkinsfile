@@ -36,11 +36,10 @@ pipeline {
         stage('Terraform Init') {
             steps {
                 dir('.') {
-                     {
-                        
-                            sh 'pwd'
-                            sh 'terraform init'
-                            sh 'terraform plan -out=tfplan'
+                     { 
+                     sh 'pwd'
+                     sh 'terraform init'
+                     sh 'terraform plan -out=tfplan'
                     }
                 }
             }
