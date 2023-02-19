@@ -39,7 +39,7 @@ pipeline {
                         ansiColor('xterm'){
                             sh 'pwd'
                             sh 'terraform init'
-                            sh 'terraform plan -out=tfplan'
+                            sh 'terraform plan'
                         }
                 }
             }
