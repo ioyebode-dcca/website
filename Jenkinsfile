@@ -36,10 +36,17 @@ pipeline {
         stage('Terraform Init') {
             steps {
                 dir('.') {
-                     { 
-                     sh 'pwd'
-                     sh 'terraform init'
-                     sh 'terraform plan -out=tfplan'
+                    withCredentials([[
+                        $class: 'AmazonWebServicesCredentialsBinding',
+                        credentialsId: credentialsId,
+                        accessKeyVariable: 'AWS_ACCESS_KEY_ID',
+                        secretKeyVariable: 'AWS_SECRET_ACCESS_KEY'
+                    ]]) {
+                        ansiColor('xterm'){
+                            sh 'pwd'
+                            sh 'terraform init'
+                            sh 'terraform plan -out=tfplan'
+                        }
                     }
                 }
             }
