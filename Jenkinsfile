@@ -38,7 +38,6 @@ pipeline {
                sh 'pwd'
                sh 'terraform init'
                sh 'terraform plan'
-                }
             }
         }
 	stage ('check plan') {
