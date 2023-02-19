@@ -35,11 +35,14 @@ pipeline {
         }    
         stage('Terraform Init') {
             steps {
-               sh 'pwd'
-               sh 'terraform init -reconfigure'
-	       dir('.')
-	       sh "terraform plan -input=false -out tfplan "
-               sh 'terraform show -no-color tfplan > tfplan.txt'
+                dir('.') {
+                     {
+                        
+                            sh 'pwd'
+                            sh 'terraform init'
+                            sh 'terraform plan -out=tfplan'
+                    }
+                }
             }
         }
 	stage ('check plan') {
