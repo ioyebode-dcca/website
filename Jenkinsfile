@@ -16,7 +16,7 @@ pipeline {
         stage('Set Terraform path') {
             steps {
                 script {
-                    env.PATH += ":/usr/local/bin/"
+                    env.PATH += ":/usr/bin/terraform"
                 }
                 sh 'terraform --version'
 		sh 'pwd'
