@@ -35,7 +35,7 @@ pipeline {
         }    
         stage('Terraform Init') {
             steps {
-                dir('terraform') {
+                dir('/root/code/website') {
                         ansiColor('xterm'){
                             sh 'pwd'
                             sh 'terraform init'
