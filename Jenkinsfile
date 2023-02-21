@@ -22,17 +22,33 @@ pipeline {
 		sh 'pwd'
             }
         }
-	stage('version') {
-            steps {
-	      input ('Do you want to proceed?')	    
-                sh """
-                git --version
-                uptime
-                env
-                ls -ltr
-                """
-            }
-        }    
+	stage('Verify Tools') {
+                parallel 'Verify Git': {
+                    stage('Verify Git') {
+                      sh 'git --version'
+                    }
+
+                }, 'Verify Node': {
+                    stage('Verify Node') {
+                      sh 'npm -v'
+                    }
+
+                }, 'Verify AWS': {
+                    stage('Verify AWS') {
+                      sh 'aws -version'
+                    }
+
+                }, 'Verify Docker': {
+                    stage('Verify Docker') {
+                        sh 'docker -v'
+                    }
+
+                }, 'Verify terraform': {
+                    stage('Verify Jq') {
+                        sh 'terraform -v'
+                    }
+                }
+            }    
         stage('Terraform Init') {
             steps {
                sh 'pwd'
@@ -46,12 +62,12 @@ pipeline {
               input('Is terraform plan okay?')
             }
         } 
-	stage ('Apply') {
-            steps {
-              input('Do you want to Apply?')
-	        sh "terraform apply -input=false tfplan"
-            }
-        }
+	//stage ('Apply') {
+          //  steps {
+            //  input('Do you want to Apply?')
+	      //  sh "terraform apply -input=false tfplan"
+          //  }
+        //}
 	stage ('Destroy') {
             steps {
               input('Do you want to DESTROY?')
