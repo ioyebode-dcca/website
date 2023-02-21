@@ -48,10 +48,16 @@ pipeline {
         } 
 	stage ('Apply') {
             steps {
-              input('Is terraform plan okay?')
+              input('Do you want to Apply?')
 	        sh "terraform apply -input=false tfplan"
             }
         }
+	stage ('Destroy') {
+            steps {
+              input('Do you want to DESTROY?')
+	        sh "terraform destroy --auto-approve"
+            }
+        }  
 	stage('Ansible version') {
             steps {
                 sh """
