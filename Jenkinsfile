@@ -25,18 +25,18 @@ pipeline {
         stage('Verify Tools') {
             steps {
                 parallel(
-                    "step 1": { sh 'terraform -v' },
-                    "step 2": { sh 'docker -v' },
-                    "step 3": { sh 'aws --version' }
+                    "Terraform": { sh 'terraform -v' },
+                    "Docker": { sh 'docker -v' },
+                    "AWS": { sh 'aws --version' }
                 )
             }
         }
         stage('Verify Other Tools') {
             steps {
                 parallel(
-                    "step 1": { sh 'git --version' },
-                    "step 2": { sh 'npm -v' },
-                    "step 3": { sh 'ansible --version' }
+                    "Git": { sh 'git --version' },
+                    "NPM": { sh 'npm -v' },
+                    "Ansible": { sh 'ansible --version' }
                 )
             }
         }
