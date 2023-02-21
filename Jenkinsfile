@@ -40,7 +40,7 @@ pipeline {
                 )
             }
         }
-        stage('Terraform Init') {
+        stage('Terraform Plan') {
             steps {
                 sh 'pwd'
                 sh 'terraform init'
