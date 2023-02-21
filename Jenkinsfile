@@ -27,7 +27,7 @@ pipeline {
                 parallel(
                     "step 1": { sh 'terraform -v' },
                     "step 2": { sh 'docker -v' },
-                    "step 3": { sh 'aws -version' }
+                    "step 3": { sh 'aws --version' }
                 )
             }
         }
