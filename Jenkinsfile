@@ -36,7 +36,7 @@ pipeline {
                 parallel(
                     "step 1": { sh 'git --version' },
                     "step 2": { sh 'npm -v' },
-                    "step 3": { echo "world" }
+                    "step 3": { sh 'ansible --version' }
                 )
             }
         }
@@ -63,13 +63,6 @@ pipeline {
             steps {
                 input('Do you want to DESTROY?')
                 sh "terraform destroy --auto-approve"
-            }
-        }
-        stage('Ansible version') {
-            steps {
-                sh """
-                ansible --version
-                """
             }
         }
     }
