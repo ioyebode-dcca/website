@@ -22,33 +22,26 @@ pipeline {
 		sh 'pwd'
             }
         }
-	stage('Verify Tools') {
-                parallel 'Verify Git': {
-                    stage('Verify Git') {
-                      sh 'git --version'
-                    }
-
-                }, 'Verify Node': {
-                    stage('Verify Node') {
-                      sh 'npm -v'
-                    }
-
-                }, 'Verify AWS': {
-                    stage('Verify AWS') {
-                      sh 'aws -version'
-                    }
-
-                }, 'Verify Docker': {
-                    stage('Verify Docker') {
-                        sh 'docker -v'
-                    }
-
-                }, 'Verify terraform': {
-                    stage('Verify Jq') {
-                        sh 'terraform -v'
-                    }
-                }
-            }    
+	stages {
+        stage('Verify Tools') {
+            steps {
+                parallel(
+                        "step 1": { sh 'terraform -v' },
+                        "step 2": { sh 'docker -v' },
+                        "step 3": { sh 'aws -version' }
+                )
+            }
+        }
+        stage('Verify Tools') {
+            steps {
+                parallel(
+                        "step 1": { sh 'git --version' },
+                        "step 2": { sh 'npm -v' },
+                        "step 3": { echo "world" }
+                )
+            }
+        }
+    }    
         stage('Terraform Init') {
             steps {
                sh 'pwd'
