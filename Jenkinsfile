@@ -53,12 +53,12 @@ pipeline {
                 input('Is terraform plan okay?')
             }
         }
-        //stage ('Apply') {
-        //  steps {
-        //  input('Do you want to Apply?')
-        //  sh "terraform apply -input=false tfplan"
-        //  }
-        //}
+        stage ('Apply') {
+          steps {
+          input('Do you want to Apply?')
+          sh "terraform apply -input=false tfplan"
+          }
+        }
         stage('Destroy') {
             steps {
                 input('Do you want to DESTROY?')
