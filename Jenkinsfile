@@ -1,10 +1,11 @@
-// Jenkinsfile
-String credentialsId = 'awsCredentials'
 pipeline {
     agent any
     environment {
         AWS_ACCESS_KEY_ID     = credentials('AWS_ACCESS_KEY_ID')
         AWS_SECRET_ACCESS_KEY = credentials('AWS_SECRET_ACCESS_KEY')
+    }
+    options {
+        skipStagesAfterUnstable()
     }
     stages {
         stage('Clean workspace') {
@@ -12,9 +13,8 @@ pipeline {
                 cleanWs()
             }
         }
-        stage('checkout') {
-            steps {
-                cleanWs()
+        stage('Checkout') { 
+            steps { 
                 checkout scm
             }
         }
@@ -55,20 +55,43 @@ pipeline {
         }
         stage('check plan') {
             steps {
-                input('Is terraform plan okay?')
+                input message: 'Is terraform plan okay?', ok: 'yes'
             }
         }
         stage ('Apply') {
-          steps {
-          input('Do you want to Apply?')
-          sh "terraform apply -input=false tfplan"
-          }
-        }
-        stage('Destroy') {
             steps {
-                input('Do you want to DESTROY?')
-                sh "terraform destroy --auto-approve"
+                input message: 'Do you want to Apply?', ok: 'yes'
+                sh "terraform apply -input=false tfplan"
             }
         }
+        stage('Build') { 
+            steps { 
+                script{
+                    app = docker.build("underwater")
+                }
+            }
+        }
+        stage('Test'){
+            steps {
+                 echo 'Empty'
+            }
+        }
+        stage('Push') {
+            steps {
+                script{
+                    docker.withRegistry('https://150685619118.dkr.ecr.us-east-1.amazonaws.com/', 'ecr:us-east-1:aws-credentials') {
+                        app.push("${env.BUILD_NUMBER}")
+                        app.push("latest")
+                    }
+                }
+            }
+        }
+        stage('Deploy'){
+            steps {
+                 sh 'kubectl get nodes'
+                 sh 'kubectl apply -f deployment.yml'
+                 sh 'kubectl rollout restart deployment ecr-app-underwater'
+            }
+        }    
     }
 }
